@@ -2,7 +2,7 @@
 Python3 discord bot code for interacting with the e621 api for all my furry fellows uwu.
 
 
-This little bit of code is meant to be a command. Not full bot code. I was looking around for a long time and couldn't find any simple documentation to easily work with the e621 api. So I decided to make my own e621 command and allow you guys to use it in your bots too! provided you give creddit and not just rip the code and say you made it. This took me about 2 days to make.
+I was looking around for a long time and couldn't find any simple documentation to easily work with the e621 api. So I decided to make my own e621 command and allow you guys to use it in your bots too! provided you give creddit and not just rip the code and say you made it. This took me about 2 days to make.
 
 <br />
 <br />
