@@ -20,7 +20,6 @@ BOT_Prefix=("!")
 bot = commands.Bot(command_prefix=BOT_Prefix, intents=intents)
 
 
-# noinspection SpellCheckingInspection
 @bot.command(aliases=["e6"])
 @commands.is_nsfw()
 async def e621(ctx, *, args):
@@ -79,7 +78,6 @@ async def e621(ctx, *, args):
 
 @e621.error
 async def on_command_error(ctx, error):
-    # sourcery skip: remove-unnecessary-else, swap-if-else-branches
     if isinstance(error, commands.errors.NSFWChannelRequired):
         embed = discord.Embed(title="Error!", description="The channel this command was ran is was not a nsfw channel.\nPlease make sure to use this command in nsfw channels only.", color=0xff0000, timestamp=datetime.datetime.utcnow())
         embed.set_footer(text=f"{botver} | code by Ori#6338", icon_url='https://cdn.discordapp.com/attachments/850592305420697620/850595192641683476/orio.png')
