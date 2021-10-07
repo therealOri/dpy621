@@ -15,7 +15,9 @@ bot_token = os.getenv('bot_token')
 
 botver = "MyBot v0.0.1"
 
-bot = commands.Bot('!')
+intents = discord.Intents.all()
+BOT_Prefix=("!")
+bot = commands.Bot(command_prefix=BOT_Prefix, intents=intents)
 
 
 # noinspection SpellCheckingInspection
@@ -27,18 +29,12 @@ async def e621(ctx, *, args):
 
     # Blacklisted words that can not be used.
     # May change in the future. Be my guest for how you want to change how it handles "tags" you shouldn't use.
-    blist = ['cub', 'loli', 'shota', 'young', 'underage', 'blood', 'gore', 'death', 'dying',
-             'necrophilia']
+    blist = ['cub', 'loli', 'shota', 'young', 'underage', 'blood', 'gore', 'death', 'dying', 'necrophilia']
 
     for bad_word in blist:
         if bad_word in args.lower():
-            embed1 = discord.Embed(title=" 🚨 **Error!** 🚨",
-                                   description=f'Search Argument contains a blacklisted word. **`{bad_word}`** is a '
-                                               f'blacklisted word.',
-                                   colour=0xff0000, timestamp=datetime.datetime.utcnow())
-            embed1.set_footer(text=f"{botver} | code by Ori#6338",
-                              icon_url='https://cdn.discordapp.com/attachments/850592305420697620/850595192641683476'
-                                       '/orio.png')
+            embed1 = discord.Embed(title=" 🚨 **Error!** 🚨", description=f'Search Argument contains a blacklisted word. **`{bad_word}`** is a blacklisted word.', colour=0xff0000, timestamp=datetime.datetime.utcnow())
+            embed1.set_footer(text=f"{botver} | code by Ori#6338", icon_url='https://cdn.discordapp.com/attachments/850592305420697620/850595192641683476/orio.png')
             return await loading.edit(content='', embed=embed1)
 
     e621_agent = {
@@ -50,8 +46,10 @@ async def e621(ctx, *, args):
     # e6_request = r.get(f'https://e621.net/posts.json?tags={args}&limit=100', headers=e621_agent)
     async with aiohttp.ClientSession(headers=e621_agent, auth=aiohttp.BasicAuth(login, api_key)) as session:
         async with session.get(f'https://e621.net/posts.json?tags={args}&limit=100') as e6_request:
-            if not 200 <= e6_request.status < 300:
-                return  # TODO make embed for failed request
+            if not 200 <= e6_request.status < 300: # TODO | Add a way to see status code in description below.
+                net_embed = discord.Embed(title=" ⚠️ **Error** ⚠️ ", description="Network error. | Bad Request.", colour=0xff0000, timestamp=datetime.datetime.utcnow())
+                net_embed.set_footer(text=f"{botver} | code by Ori#6338", icon_url='https://cdn.discordapp.com/attachments/850592305420697620/850595192641683476/orio.png')
+                return await loading.edit(content="", embed=net_embed)
             json = await e6_request.json()
 
     try:
@@ -62,34 +60,19 @@ async def e621(ctx, *, args):
         image = post['file']['url']
 
     except IndexError as e:
-        embed_err = discord.Embed(title=" ⚠️ **Error!** ⚠️",
-                                  description=f'Oof, Looks like there is nothing to find for `{args}`.\nError: {e}',
-                                  colour=0xff0000, timestamp=datetime.datetime.utcnow())
-        embed_err.set_footer(text=f"{botver} | code by Ori#6338",
-                             icon_url='https://cdn.discordapp.com/attachments/850592305420697620/850595192641683476'
-                                      '/orio.png')
+        embed_err = discord.Embed(title=" ⚠️ **Error!** ⚠️", description=f'Oof, Looks like there is nothing to find for `{args}`.\nError: {e}', colour=0xff0000, timestamp=datetime.datetime.utcnow())
+        embed_err.set_footer(text=f"{botver} | code by Ori#6338", icon_url='https://cdn.discordapp.com/attachments/850592305420697620/850595192641683476/orio.png')
         return await loading.edit(embed=embed_err)
 
     file_ext = [".webm", ".mp4", ".gif", ".swf"]
     if image.split('.')[-1] in file_ext:
-        embed2 = discord.Embed(title="UwU | Webm, Mp4, Gif, or Swf format has been detected in post!",
-                               description=f" 🔞 e621 image found for **`{args}`** 🔞\n\n ⬆️ **Score:** "
-                                           f"{score}\n\n:link: **Post URL:** <https://e621.net/posts/{post_id}>"
-                                           f"\n\n:link: **Video URL:** {image}",  # TODO cool hyperlink thing
-                               colour=discord.Color.random(), timestamp=datetime.datetime.utcnow())
+        embed2 = discord.Embed(title="UwU | Webm, Mp4, Gif, or Swf format has been detected in post!", description=f" 🔞 e621 image found for **`{args}`** 🔞\n\n ⬆️ **Score:** {score}\n\n:link: **Post URL:** <https://e621.net/posts/{post_id}>\n\n:link: **Video URL:** {image}", colour=discord.Color.random(), timestamp=datetime.datetime.utcnow()) # TODO cool hyperlink thing
         embed2.set_image(url=image)
-        embed2.set_footer(text=f"{botver} | code by Ori#6338",
-                          icon_url='https://cdn.discordapp.com/attachments/850592305420697620'
-                                   '/850595192641683476/orio.png')
+        embed2.set_footer(text=f"{botver} | code by Ori#6338", icon_url='https://cdn.discordapp.com/attachments/850592305420697620/850595192641683476/orio.png')
         return await loading.edit(content='', embed=embed2)
 
-    embed3 = discord.Embed(title="UwU",
-                           description=f"🔞 e621 image for **`{args}`** 🔞 \n\n_ _ \n ⬆️ **Score:** {score}\n\n"
-                                       f":link: **[Post URL](https://e621.net/posts/{post_id})**",
-                           colour=discord.Color.random())
-    embed3.set_footer(text=f"{botver} | code by Ori#6338",
-                      icon_url='https://cdn.discordapp.com/attachments/850592305420697620/850595192641683476/orio'
-                               '.png')
+    embed3 = discord.Embed(title="UwU", description=f"🔞 e621 image for **`{args}`** 🔞 \n\n_ _ \n ⬆️ **Score:** {score}\n\n:link: **[Post URL](https://e621.net/posts/{post_id})**", colour=discord.Color.random())
+    embed3.set_footer(text=f"{botver} | code by Ori#6338", icon_url='https://cdn.discordapp.com/attachments/850592305420697620/850595192641683476/orio.png')
     embed3.set_image(url=image)
     await loading.edit(content='', embed=embed3)
 
@@ -98,13 +81,8 @@ async def e621(ctx, *, args):
 async def on_command_error(ctx, error):
     # sourcery skip: remove-unnecessary-else, swap-if-else-branches
     if isinstance(error, commands.errors.NSFWChannelRequired):
-        embed = discord.Embed(title="Error!",
-                              description="The channel this command was ran is was not a nsfw channel. Please make "
-                                          "sure to use this command in nsfw channels only.",
-                              color=0xff0000, timestamp=datetime.datetime.utcnow())
-        embed.set_footer(text=f"{botver} | code by Ori#6338",
-                         icon_url='https://cdn.discordapp.com/attachments/850592305420697620/850595192641683476/orio'
-                                  '.png')
+        embed = discord.Embed(title="Error!", description="The channel this command was ran is was not a nsfw channel.\nPlease make sure to use this command in nsfw channels only.", color=0xff0000, timestamp=datetime.datetime.utcnow())
+        embed.set_footer(text=f"{botver} | code by Ori#6338", icon_url='https://cdn.discordapp.com/attachments/850592305420697620/850595192641683476/orio.png')
         await ctx.send(embed=embed)
     else:
         raise error
