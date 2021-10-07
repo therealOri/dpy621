@@ -1,7 +1,6 @@
 # Code made by Ori#6338 | <- DO NOT REMOVE
 import discord
 from discord.ext import commands
-from discord.utils import get
 from discord.ext.commands import *
 import json
 import requests as r
