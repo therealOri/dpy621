@@ -46,8 +46,8 @@ async def e621(ctx, *, args):
     # e6_request = r.get(f'https://e621.net/posts.json?tags={args}&limit=100', headers=e621_agent)
     async with aiohttp.ClientSession(headers=e621_agent, auth=aiohttp.BasicAuth(login, api_key)) as session:
         async with session.get(f'https://e621.net/posts.json?tags={args}&limit=100') as e6_request:
-            if not 200 <= e6_request.status < 300: # TODO | Add a way to see status code in description below.
-                net_embed = discord.Embed(title=" ⚠️ **Error** ⚠️ ", description=f"Network error. | Bad Request.\n Error code: {e6_request.status}", colour=0xff0000, timestamp=datetime.datetime.utcnow())
+            if not 200 <= e6_request.status < 300:
+                net_embed = discord.Embed(title=" ⚠️ **Error** ⚠️ ", description=f"Network error. | Bad Request.\n Error code: `**{e6_request.status}**`", colour=0xff0000, timestamp=datetime.datetime.utcnow())
                 net_embed.set_footer(text=f"{botver} | code by Ori#6338", icon_url='https://cdn.discordapp.com/attachments/850592305420697620/850595192641683476/orio.png')
                 return await loading.edit(content="", embed=net_embed)
             json = await e6_request.json()
