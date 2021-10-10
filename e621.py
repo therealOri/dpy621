@@ -63,7 +63,7 @@ async def e621(ctx, *, args):
         embed_err.set_footer(text=f"{botver} | code by Ori#6338", icon_url='https://cdn.discordapp.com/attachments/850592305420697620/850595192641683476/orio.png')
         return await loading.edit(embed=embed_err)
 
-    file_ext = [".webm", ".mp4", ".gif", ".swf"]
+    file_ext = ["webm", "mp4", "gif", "swf"]
     if image.split('.')[-1] in file_ext:
         embed2 = discord.Embed(title="UwU | Webm, Mp4, Gif, or Swf format has been detected in post!", description=f" 🔞 e621 image found for **`{args}`** 🔞\n\n ⬆️ **Score:** {score}\n\n:link: **Post URL:** <https://e621.net/posts/{post_id}>\n\n:link: **Video URL:** {image}", colour=discord.Color.random(), timestamp=datetime.datetime.utcnow()) # TODO cool hyperlink thing
         embed2.set_image(url=image)
