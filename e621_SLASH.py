@@ -1,3 +1,5 @@
+# Code made by Ori#6338 | <- DO NOT REMOVE
+
 # Same command but for slash commands in a cog. I like to put my slash commands in a seprate file/cog. | Put this in a folder called "cogs".
 import discord
 from discord.ext import commands
