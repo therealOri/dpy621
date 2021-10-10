@@ -1,4 +1,6 @@
 # Code made by Ori#6338 | <- DO NOT REMOVE
+import colorama
+from colorama import Fore
 import discord
 from discord.ext import commands
 import datetime
