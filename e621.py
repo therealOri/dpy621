@@ -32,7 +32,7 @@ async def e621(ctx, *, args):
 
     for bad_word in blist:
         if bad_word in args.lower():
-            embed1 = discord.Embed(title=" 🚨 **Error!** 🚨", description=f'Search Argument contains a blacklisted word. **`{bad_word}`** is a blacklisted word.', colour=0xff0000, timestamp=datetime.datetime.utcnow())
+            embed1 = discord.Embed(title=" 🚨 **Warning!** 🚨", description=f'Search Argument contains a blacklisted word. **`{bad_word}`** is a blacklisted word.', colour=0xff0000, timestamp=datetime.datetime.utcnow())
             embed1.set_footer(text=f"{botver} | code by Ori#6338", icon_url='https://cdn.discordapp.com/attachments/850592305420697620/850595192641683476/orio.png')
             return await loading.edit(content='', embed=embed1)
 
