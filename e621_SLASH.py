@@ -14,6 +14,8 @@ load_dotenv()
 api_key = os.getenv("api_key")
 login = os.getenv("login")
 
+botver = "MyBot v0.0.1"
+
 
 class e621Slash(commands.Cog):
     def __init__ (self, bot):
