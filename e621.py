@@ -26,6 +26,11 @@ for filename in os.listdir("./cogs"):
     if filename.endswith(".py"):
         bot.load_extension(f"cogs.{filename[:-3]}")
         print(Fore.GREEN + f"Loaded {filename[:-3]}")
+        
+        
+@bot.event
+async def on_ready():
+    print(Fore.WHITE + "[" + Fore.GREEN + '+' + Fore.WHITE + "]" + Fore.GREEN + f" connection established and logged in as: {bot.user.name} with ID: {bot.user.id}")
 
 
 @bot.command(aliases=["e6"])
