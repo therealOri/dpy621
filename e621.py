@@ -19,6 +19,12 @@ intents = discord.Intents.all()
 BOT_Prefix=("!")
 bot = commands.Bot(command_prefix=BOT_Prefix, intents=intents)
 
+# Load .py files in folder called "cogs".
+for filename in os.listdir("./cogs"):
+    if filename.endswith(".py"):
+        xboi.load_extension(f"cogs.{filename[:-3]}")
+        print(Fore.GREEN + f"Loaded {filename[:-3]}")
+
 
 @bot.command(aliases=["e6"])
 @commands.is_nsfw()
