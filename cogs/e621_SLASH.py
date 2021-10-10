@@ -22,7 +22,7 @@ class e621Slash(commands.Cog):
         self.bot = bot
 
 
-    @cog_ext.cog_slash(name="e6", description="A nsfw command to get all the yiff using the e621 api. | Example: /e621 <tag tag tag_tag>")
+    @cog_ext.cog_slash(name="e6", description="A nsfw command to get all the yiff using the e621 api. | Example: /e6 <tag tag tag_tag>")
     @commands.is_nsfw()
     async def e6(self, ctx: SlashContext, arg: str):
         loading = await ctx.send(f' ⌛ Looking for an image on e621 with tags **`{arg}`**. ⌛')
