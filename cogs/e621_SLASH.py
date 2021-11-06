@@ -9,6 +9,8 @@ import aiohttp
 from dotenv import load_dotenv
 import os
 import random
+import json
+import datetime
 
 load_dotenv()
 api_key = os.getenv("api_key")
