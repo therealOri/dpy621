@@ -4,6 +4,7 @@ from colorama import Fore
 import discord
 from discord.ext import commands
 import datetime
+import json
 import aiohttp
 import random
 import os
