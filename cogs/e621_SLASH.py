@@ -11,27 +11,33 @@ import os
 import random
 import json
 import datetime
+import sqlite3
 
 load_dotenv()
 api_key = os.getenv("api_key")
 login = os.getenv("login")
 
 botver = "MyBot v0.0.1"
+guild_ids=[GUILD_ID_HERE]
 
+database = sqlite3.connect('tag_blacklist.db')
+c = database.cursor()
 
 class e621Slash(commands.Cog):
     def __init__ (self, bot):
         self.bot = bot
 
 
-    @cog_ext.cog_slash(name="e6", description="A nsfw command to get all the yiff using the e621 api. | Example: /e6 <tag tag tag_tag>")
+    @cog_ext.cog_slash(name="e6", description="A nsfw command to get all the yiff using the e621 api. | Example: /e6 <tag tag tag_tag>", guild_ids=guild_ids)
     @commands.is_nsfw()
     async def e6(self, ctx: SlashContext, arg: str):
         loading = await ctx.send(f' ⌛ Looking for an image on e621 with tags **`{arg}`**. ⌛')
 
-        # Blacklisted words that can not be used.
-        # May change in the future. Be my guest for how you want to change how it handles "tags" you shouldn't use.
-        blist = ['cub', 'loli', 'shota', 'young', 'underage', 'blood', 'gore', 'death', 'dying', 'necrophilia']
+        # Blacklisted words that can not be used. | This is to make sure users can't use blacklisted words in their search.
+        c.execute(f'SELECT tag_names FROM tags')
+        ldb = c.fetchall()
+        ldb = str(ldb).replace("(", "").replace(",)", "").replace("'", "")
+        blist = ldb.strip('][').split(', ')
 
         for bad_word in blist:
             if bad_word in arg.lower():
@@ -87,6 +93,29 @@ class e621Slash(commands.Cog):
             await ctx.send(embed=embed)
         else:
             raise error
+    
+
+
+    @cog_ext.cog_subcommand(base='tag', name='add', description='Add tags to the bots tag blacklist.', guild_ids=guild_ids)
+    async def add(self, ctx: SlashContext, tag: str):
+        database = sqlite3.connect('tag_blacklist.db')
+        c = database.cursor()
+        c.execute(f"INSERT INTO tags VALUES ('{tag}')")
+        database.commit()
+        database.close()
+        await ctx.send('Tag successfully added to blacklist!', hidden=True)
+
+    @cog_ext.cog_subcommand(base='tag', name='rmv', description='Remove tags from the bots tag blacklist.', guild_ids=guild_ids)
+    async def rmv(self, ctx: SlashContext, tag: str):
+        database = sqlite3.connect('tag_blacklist.db')
+        c = database.cursor()
+        c.execute(f"DELETE FROM tags WHERE tag_names LIKE '{tag}'")
+        database.commit()
+        database.close()
+        await ctx.send('Tag successfully removed from blacklist!', hidden=True)
+
+
+
             
 def setup(bot):
   bot.add_cog(e621Slash(bot)) 
