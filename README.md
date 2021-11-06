@@ -11,6 +11,8 @@ I was looking around for a long time and couldn't find any simple documentation 
 [Api Documentation](https://e621.net/help/api)
 
 [Make an account](https://e621.net/users/new)
+
+[DB Browser](https://sqlitebrowser.org/dl/)
 > __ __
 > After making an account, click on "Account" in the top left. Then click on "Manage Api Access". Enter your password and copy said api key. If you already have an account or don't want to make one for your bot to use then you can just login instead of makning an account and follow the same steps mentioned.
 > __ __
