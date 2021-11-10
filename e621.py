@@ -9,6 +9,7 @@ import aiohttp
 import random
 import os
 from dotenv import load_dotenv
+import sqlite3
 
 load_dotenv()
 
@@ -21,6 +22,9 @@ botver = "MyBot v0.0.1"
 intents = discord.Intents.all()
 BOT_Prefix=("!")
 bot = commands.Bot(command_prefix=BOT_Prefix, intents=intents)
+
+database = sqlite3.connect('tag_blacklist.db')
+c = database.cursor()
 
 # Load .py files in folder called "cogs".
 for filename in os.listdir("./cogs"):
@@ -41,8 +45,10 @@ async def e621(ctx, *, args):
     loading = await ctx.send(f' ⌛ Looking for an image on e621 with tags **`{args}`**. ⌛')
 
     # Blacklisted words that can not be used.
-    # May change in the future. Be my guest for how you want to change how it handles "tags" you shouldn't use.
-    blist = ['cub', 'loli', 'shota', 'young', 'underage', 'blood', 'gore', 'death', 'dying', 'necrophilia']
+    c.execute(f'SELECT tag_names FROM tags')
+    ldb = c.fetchall()
+    ldb = str(ldb).replace("(", "").replace(",)", "").replace("'", "")
+    blist = ldb.strip('][').split(', ')
 
     for bad_word in blist:
         if bad_word in args.lower():
