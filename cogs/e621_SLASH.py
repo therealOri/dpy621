@@ -34,7 +34,7 @@ class e621Slash(commands.Cog):
         loading = await ctx.send(f' ⌛ Looking for an image on e621 with tags **`{arg}`**. ⌛')
 
         # Blacklisted words that can not be used. | This is to make sure users can't use blacklisted words in their search.
-        c.execute(f'SELECT tag_names FROM tags')
+        c.execute('SELECT tag_names FROM tags')
         ldb = c.fetchall()
         ldb = str(ldb).replace("(", "").replace(",)", "").replace("'", "")
         blist = ldb.strip('][').split(', ')
@@ -87,12 +87,11 @@ class e621Slash(commands.Cog):
 
     @e6.error
     async def on_command_error(self, ctx: SlashContext, error):
-        if isinstance(error, commands.errors.NSFWChannelRequired):
-            embed = discord.Embed(title="Error!", description="The channel this command was ran is was not a nsfw channel.\nPlease make sure to use this command in nsfw channels only.", color=0xff0000, timestamp=datetime.datetime.utcnow())
-            embed.set_footer(text=f"{botver} | code by Ori#6338", icon_url='https://cdn.discordapp.com/attachments/850592305420697620/850595192641683476/orio.png')
-            await ctx.send(embed=embed)
-        else:
+        if not isinstance(error, commands.errors.NSFWChannelRequired):
             raise error
+        embed = discord.Embed(title="Error!", description="The channel this command was ran is was not a nsfw channel.\nPlease make sure to use this command in nsfw channels only.", color=0xff0000, timestamp=datetime.datetime.utcnow())
+        embed.set_footer(text=f"{botver} | code by Ori#6338", icon_url='https://cdn.discordapp.com/attachments/850592305420697620/850595192641683476/orio.png')
+        await ctx.send(embed=embed)
     
 
 

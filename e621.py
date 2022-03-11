@@ -30,12 +30,15 @@ c = database.cursor()
 for filename in os.listdir("./cogs"):
     if filename.endswith(".py"):
         bot.load_extension(f"cogs.{filename[:-3]}")
-        print(Fore.GREEN + f"Loaded {filename[:-3]}")
+        print(f"{Fore.GREEN}Loaded {filename[:-3]}")
         
         
 @bot.event
 async def on_ready():
-    print(Fore.WHITE + "[" + Fore.GREEN + '+' + Fore.WHITE + "]" + Fore.GREEN + f" connection established and logged in as: {bot.user.name} with ID: {bot.user.id}")
+    print(
+        f'{Fore.WHITE}[{Fore.GREEN}+{Fore.WHITE}]{Fore.GREEN}'
+        + f" connection established and logged in as: {bot.user.name} with ID: {bot.user.id}"
+    )
 
 
 @bot.command(aliases=["e6"])
@@ -45,7 +48,7 @@ async def e621(ctx, *, args):
     loading = await ctx.send(f' ⌛ Looking for an image on e621 with tags **`{args}`**. ⌛')
 
     # Blacklisted words that can not be used.
-    c.execute(f'SELECT tag_names FROM tags')
+    c.execute('SELECT tag_names FROM tags')
     ldb = c.fetchall()
     ldb = str(ldb).replace("(", "").replace(",)", "").replace("'", "")
     blist = ldb.strip('][').split(', ')
@@ -98,12 +101,11 @@ async def e621(ctx, *, args):
 
 @e621.error
 async def on_command_error(ctx, error):
-    if isinstance(error, commands.errors.NSFWChannelRequired):
-        embed = discord.Embed(title="Error!", description="The channel this command was ran is was not a nsfw channel.\nPlease make sure to use this command in nsfw channels only.", color=0xff0000, timestamp=datetime.datetime.utcnow())
-        embed.set_footer(text=f"{botver} | code by Ori#6338", icon_url='https://cdn.discordapp.com/attachments/850592305420697620/850595192641683476/orio.png')
-        await ctx.send(embed=embed)
-    else:
+    if not isinstance(error, commands.errors.NSFWChannelRequired):
         raise error
+    embed = discord.Embed(title="Error!", description="The channel this command was ran is was not a nsfw channel.\nPlease make sure to use this command in nsfw channels only.", color=0xff0000, timestamp=datetime.datetime.utcnow())
+    embed.set_footer(text=f"{botver} | code by Ori#6338", icon_url='https://cdn.discordapp.com/attachments/850592305420697620/850595192641683476/orio.png')
+    await ctx.send(embed=embed)
 
 
 bot.run(bot_token)
