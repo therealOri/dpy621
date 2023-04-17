@@ -1,0 +1,4 @@
+colorama
+discord.py>=1.7.0,<2.0.0
+dotenv
+discord_slash
