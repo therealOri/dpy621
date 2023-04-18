@@ -25,8 +25,10 @@ I was looking around for a long time and couldn't find any simple documentation 
 ```bash
 [therealOri ~]$ git clone https://github.com/therealOri/dpy621.git
 [therealOri ~]$ cd dpy621
-[therealOri ~]$ pip install <module name that isn't found>
+[therealOri ~]$ pip install -r requirements.txt
 ```
+> You can run the following command if a module/package isn't found.
+> - [therealOri ~]$ pip install <module name that isn't found>
 
 <br />
 <br />
